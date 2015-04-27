@@ -25,7 +25,6 @@ public class AuctionUserDao {
     private Md5PasswordEncoder md5PasswordEncoder;
     private SecureRandom secureRandom;
 
-
     @Autowired
     public AuctionUserDao(Session session, Md5PasswordEncoder md5PasswordEncoder, SecureRandom secureRandom) {
         this.session = session;
