@@ -1,0 +1,19 @@
+Move todo list to issues when I have connectivity
+
+Include timestamp in response
+Log out
+Owner of auction - show / delete etc
+auction not found
+
+Server side metrics
+Remember what the other stream metric thing is
+Cassandra health check
+
+Analytics:
+
+HdrHistogram metrics
+Immutable tests
+
+New bid = add to steam + save
+On initial request built stream from DB
+RxJava streaming of auction events over HTTP

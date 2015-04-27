@@ -1,0 +1,86 @@
+buildscript {
+    ext {
+        springBootVersion = '1.2.1.RELEASE'
+        cassandraDriverVersion = "2.1.4"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("com.datastax.cassandra:cassandra-driver-core:${cassandraDriverVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'scala'
+apply plugin: 'spring-boot'
+apply plugin: 'idea'
+
+import com.datastax.driver.core.*;
+
+task buildSchema << {
+    Cluster cluster = Cluster.builder().addContactPoint("localhost").build()
+    Session session = cluster.connect()
+
+    new File("src/main/resources/schema/tables.cql").eachLine { line ->
+        println("Executing $line")
+        session.execute(line)
+    }
+}
+
+task dropSchema << {
+    Cluster cluster = Cluster.builder().addContactPoint("localhost").build()
+    Session session = cluster.connect("killrauction")
+    session.execute("drop keyspace killrauction")
+}
+
+jar {
+    baseName = 'killraction-server'
+    version = '0.0.1-SNAPSHOT'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://oss.jfrog.org/artifactory/oss-release-local"
+    }
+    maven {
+        url "http://repo.springsource.org/snapshot"
+    }
+}
+
+project.ext.apacheHttpVersion = "4.4"
+project.ext.cassandraDriverVersion = "2.1.5"
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-jersey")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-remote-shell")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-websocket")
+    compile("org.springframework:spring-messaging")
+    compile("com.datastax.cassandra:cassandra-driver-core:${cassandraDriverVersion}")
+    compile("com.datastax.cassandra:cassandra-driver-mapping:${cassandraDriverVersion}")
+    compile("io.dropwizard.metrics:metrics-core:3.1.0")
+    compile("io.dropwizard.metrics:metrics-graphite:3.1.0")
+    compile("com.ryantenney.metrics:metrics-spring:3.0.4")
+    compile("com.mangofactory:swagger-springmvc:0.9.5")
+    compile("org.ajar:swagger-spring-mvc-ui:0.4")
+    compile('io.reactivex:rxjava:1.0.8')
+
+    // unit + acceptance testing
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.apache.httpcomponents:httpclient:${apacheHttpVersion}")
+    testCompile("org.apache.httpcomponents:fluent-hc:${apacheHttpVersion}")
+
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+

@@ -1,0 +1,10 @@
+<table ng-table="tableParams"  class="table">
+    <tr ng-repeat="auction in auctions">
+        <td data-title="'Name'" >
+            <a href="#/auction-view/{{ auction.name }}">{{auction.name}} </a>
+        </td>
+        <td data-title="'Ends'">
+            {{ auction.expires  | date:'dd/MM/yyyy @ h:mma'  }}
+        </td>
+    </tr>
+</table>
