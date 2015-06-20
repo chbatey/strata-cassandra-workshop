@@ -20,42 +20,4 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/api");
         config.enableSimpleBroker("/queue", "/topic");
     }
-
-//    @Override
-//    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-//        registry.addHandler(new BidUpdatesHandler(), "/api/bid-stream");
-//    }
-
-//    public static class BidUpdatesHandler extends TextWebSocketHandler {
-//
-//        private static final Logger LOGGER = LoggerFactory.getLogger(BidUpdatesHandler.class);
-//        private final ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
-//        private ScheduledFuture<?> hello;
-//
-//        @Override
-//        protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-//            LOGGER.info("Message {} {}", session, message);
-//            super.handleTextMessage(session, message);
-//        }
-//
-//        @Override
-//        public void afterConnectionEstablished(final WebSocketSession session) throws Exception {
-//            LOGGER.info("Connection established {}", session);
-//            hello = ses.scheduleAtFixedRate((Runnable) () -> {
-//                int i = 0;
-//                try {
-//                    LOGGER.info("Sending message");
-//                    session.sendMessage(new TextMessage("Hello " + i++));
-//                } catch (IOException e) {
-//                    LOGGER.error("Exception sending message", e);
-//                }
-//            }, 1, 1, TimeUnit.SECONDS);
-//        }
-//
-//        @Override
-//        public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-//            LOGGER.info("{} {}", session, status);
-//            hello.cancel(true);
-//        }
-//    }
 }
